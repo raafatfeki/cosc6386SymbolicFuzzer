@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
 
 if __package__ is None or __package__ == "":
-    from ConcolicFuzzer import ArcCoverage  # minor dependency
+    from fuzzingbook.ConcolicFuzzer import ArcCoverage  # minor dependency
 else:
     from .ConcolicFuzzer import ArcCoverage  # minor dependency
 
@@ -701,7 +701,7 @@ if __name__ == "__main__":
 
 
 if __package__ is None or __package__ == "":
-    from Fuzzer import Fuzzer
+    from fuzzingbook.Fuzzer import Fuzzer
 else:
     from .Fuzzer import Fuzzer
 
@@ -917,7 +917,7 @@ if __name__ == "__main__":
 
 
 if __package__ is None or __package__ == "":
-    from ExpectError import ExpectError
+    from fuzzingbook.ExpectError import ExpectError
 else:
     from .ExpectError import ExpectError
 
