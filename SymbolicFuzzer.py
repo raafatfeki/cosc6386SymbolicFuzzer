@@ -710,7 +710,8 @@ class SimpleSymbolicFuzzer(Fuzzer):
     def __init__(self, fn, **kwargs):
         self.fn_name = fn.__name__
         py_cfg = PyCFG()
-        py_cfg.gen_cfg(inspect.getsource(fn))
+        self.fn_source = inspect.getsource(fn)
+        py_cfg.gen_cfg(self.fn_source)
         self.fnenter, self.fnexit = py_cfg.functions[self.fn_name]
         self.used_variables = used_vars(fn)
         self.fn_args = list(inspect.signature(fn).parameters)
