@@ -1561,13 +1561,11 @@ if __name__ == "__main__":
 
 class AdvancedSymbolicFuzzer(AdvancedSymbolicFuzzer):
     def get_all_paths(self, fenter):
-        print("hello")
         path_lst = [PNode(0, fenter)]
         completed = []
         for i in range(self.max_iter):
             new_paths = [PNode(0, fenter)]
             for path in path_lst:
-                print(type(path))
                 # explore each path once
                 if path.cfgnode.children:
                     np = path.explore()

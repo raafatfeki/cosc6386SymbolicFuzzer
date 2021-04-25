@@ -40,11 +40,12 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
                 break
             self.pnodesList.append(list())
             for parentPnode in self.pnodesList[self.level - 1]:
-                for childCfg in parentPnode.cfgnode.children:
+                for (i, childCfg) in enumerate( parentPnode.cfgnode.children):
                     # if(childCfg.rid in parsedCfgNodes):
                     #     continue
                     self.nbNodes = self.nbNodes + 1
-                    newNode = PNode(childCfg.rid, childCfg, parentPnode)
+                    parent_updateOrder = parentPnode.copy(i) if i else parentPnode
+                    newNode = PNode(childCfg.rid, childCfg, parent_updateOrder)
                     self.pnodesList[self.level].append(newNode)
                     self.pnodesListall.append(newNode)
                     parsedCfgNodes.append(childCfg.rid)
@@ -67,11 +68,15 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
 
     def solveAllPaths(self):
         for idx, path in enumerate(self.pathsList):
-            print("*********************")
-            pathStr = "Path %d: " % (idx+1)
+            pathLines = list()
             for node in path:
-                pathStr = (pathStr + "L%s -> " %  str(node.cfgnode.lineno()))
+                pathLines.append(str(node.cfgnode.lineno()))
             args = self.solve_path_constraint(path)
-            print(pathStr, ": ", args)
-            print("*********************")
+            pathStr = "Path %d: [%s] => \tSolution=%s" % (idx+1, ", ".join(pathLines), args)
+            print(pathStr)
+            print("**********************************")
 
+
+# TODO:
+# If we want to get path by node, we can create dictionary that contains list of all Pnodes
+# that have same idx (Same cfg node)
