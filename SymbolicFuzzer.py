@@ -716,7 +716,7 @@ class SimpleSymbolicFuzzer(Fuzzer):
         self.used_variables = used_vars(fn)
         self.fn_args = list(inspect.signature(fn).parameters)
         self.z3 = z3.Solver()
-
+        self.z3.set(unsat_core=True)
         self.paths = None
         self.last_path = None
 
@@ -1250,10 +1250,14 @@ class AdvancedSymbolicFuzzer(AdvancedSymbolicFuzzer):
 
         solutions = {}
         with checkpoint(self.z3):
-            st = 'self.z3.add(%s)' % ', '.join(constraints)
+            newConstraintsList  = list()
+            for idx, constr in enumerate(constraints):
+                newConstraintsList.append("z3.Bool('P%d') == (%s)" % (idx, constr))
+                self.z3.assert_and_track(eval("z3.Bool('P%d')" % (idx)), constr)
+            st = 'self.z3.add(%s)' % ', '.join(newConstraintsList)
             eval(st)
             if self.z3.check() != z3.sat:
-                return {}
+                return {"Unsat Core: %s" % self.z3.unsat_core()}
             m = self.z3.model()
             solutions = {d.name(): m[d] for d in m.decls()}
             my_args = {k: solutions.get(k, None) for k in self.fn_args}
