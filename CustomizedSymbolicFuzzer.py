@@ -19,6 +19,7 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
         self.nbNodes        = 1
         self.pnodesListall  = [PNode(self.fnenter.rid, self.fnenter)]
         self.pathsList      = list()
+        self.constraints    = ""
 
     def process(self):
         pass
@@ -72,7 +73,8 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
             for node in path:
                 pathLines.append(str(node.cfgnode.lineno()))
             args = self.solve_path_constraint(path)
-            pathStr = "Path %d: [%s] => \tSolution=%s" % (idx+1, ", ".join(pathLines), args)
+            pathStr = "Path %d: [%s]\nConstraints: %s \n\t=> Solution=%s" % \
+                        (idx+1, ", ".join(pathLines),self.constraints, args)
             print(pathStr)
             print("**********************************")
 
