@@ -17,7 +17,7 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
         self.pnodesList     = [[PNode(self.fnenter.rid, self.fnenter)]]
         self.level          = 1
         self.nbNodes        = 1
-        self.pnodesListall  = [PNode(self.fnenter.rid-1, self.fnenter)]
+        self.pnodesListall  = [PNode(self.fnenter.rid, self.fnenter)]
         self.pathsList      = list()
 
     def process(self):
@@ -41,27 +41,26 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
             self.pnodesList.append(list())
             for parentPnode in self.pnodesList[self.level - 1]:
                 for childCfg in parentPnode.cfgnode.children:
-                    if(childCfg.rid in parsedCfgNodes):
-                        continue
+                    # if(childCfg.rid in parsedCfgNodes):
+                    #     continue
                     self.nbNodes = self.nbNodes + 1
-                    newNode = PNode(childCfg.rid-1, childCfg, parentPnode)
+                    newNode = PNode(childCfg.rid, childCfg, parentPnode)
                     self.pnodesList[self.level].append(newNode)
                     self.pnodesListall.append(newNode)
                     parsedCfgNodes.append(childCfg.rid)
             self.level = self.level + 1
-        # self.pnodesList[-1].append()self.fnexit
-        print("We have %d levels and %d nodes" % (self.level, self.nbNodes))
-        print(len(self.pnodesListall))
-        # print(self.pnodesList)
+
+        if (not self.pnodesList[-1]):
+            del self.pnodesList[-1]
+            self.level = self.level - 1
         return self.pnodesListall
 
     def generatePathsList(self, entryLevel=-1, exitLevel=1000):
-        # Raafat: We need to check entryLevel and exitLevel are within the limits
         # Raafat: we can adjust the code such we can get path not only from node to root
         if entryLevel < 1:
             entryLevel = 1
         if exitLevel > self.level:
-            exitLevel = self.level
+            exitLevel = self.level + 1
         for level in range(entryLevel, exitLevel):
             for pNode in self.pnodesList[level-1]:
                 self.pathsList.append(pNode.get_path_to_root())

@@ -12,13 +12,13 @@ from examples.check_triangle import check_triangle
 # When calling the constructor, we create the cfg using ControlFlow package 
 # then we call process() function that create list of paths
 
-# TODO: RAAFAT: max_iter reflect how deep to go into the cfg tree
-# Example: if  max_iter=2 means we get level 0,1 and 2 of the tree only.
+# TODO: RAAFAT: max_depth reflect how deep to go into the cfg tree
+# Example: if  max_depth=2 means we get level 0,1 and 2 of the tree only.
 # In check_triangle, it means only the node with line= 1, 2, 3, 11
 # Check the graph you can extract only 4 paths from root
-# best solution would be to determine the depth of the cfg that max_iter should be less than it 
+# best solution would be to determine the depth of the cfg that max_depth should be less than it
 
-symbFuzz = CustomizedSymbolicFuzzer(check_triangle, max_tries=10, max_iter=3, max_depth=10)
+symbFuzz = CustomizedSymbolicFuzzer(check_triangle, max_tries=10, max_depth=10)
 symbFuzz.renderCFG()
 symbFuzz.generatePnodesByDepth()
 symbFuzz.generatePathsList()
