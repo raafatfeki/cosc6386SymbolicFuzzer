@@ -130,7 +130,8 @@ SYM_VARS = {
     int: (
         z3.Int, z3.IntVal), float: (
             z3.Real, z3.RealVal), str: (
-                z3.String, z3.StringVal)}
+                z3.String, z3.StringVal), bool: (
+                z3.Bool, z3.BoolVal)}
 
 def get_symbolicparams(fn):
     params, ret = get_annotations(fn)
