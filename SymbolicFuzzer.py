@@ -544,6 +544,8 @@ def declarations(astnode, hm=None):
             declarations(b, hm)
     elif isinstance(astnode, ast.Return):
         pass
+    elif isinstance(astnode, ast.Expr):
+        pass
     else:
         raise Exception(str(astnode))
     return hm
@@ -1187,7 +1189,7 @@ def to_single_assignment_predicates(path):
             target = ast.Name('_%s_%d' %
                               (ast_node.targets[0].id, env[assigned]), None)
             new_node = ast.Expr(ast.Compare(target, [ast.Eq()], val))
-        elif isinstance(ast_node, (ast.Return, ast.Pass)):
+        elif isinstance(ast_node, (ast.Return, ast.Pass, ast.Expr)):
             new_node = None
         else:
             s = "NI %s %s" % (type(ast_node), ast_node.target.id)
