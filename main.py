@@ -8,6 +8,8 @@
 # import os 
 from CustomizedSymbolicFuzzer import CustomizedSymbolicFuzzer
 from examples.check_triangle import check_triangle
+from examples.gcd import gcd
+from examples.copyToEachOther import copyToEachOther
 
 # When calling the constructor, we create the cfg using ControlFlow package 
 # then we call process() function that create list of paths
@@ -18,12 +20,21 @@ from examples.check_triangle import check_triangle
 # Check the graph you can extract only 4 paths from root
 # best solution would be to determine the depth of the cfg that max_depth should be less than it
 
-symbFuzz = CustomizedSymbolicFuzzer(check_triangle, max_tries=10, max_depth=10)
-symbFuzz.renderCFG()
-symbFuzz.generatePnodesByDepth()
-symbFuzz.generatePathsList()
-symbFuzz.solveAllPaths()
-symbFuzz.printMapConstrains()
+# symbFuzz = CustomizedSymbolicFuzzer(check_triangle, max_tries=10, max_depth=10)
+# fuzz contains all these functions
+# symbFuzz.renderCFG()
+# symbFuzz.generatePnodesByDepth()
+# symbFuzz.generatePathsList()
+# symbFuzz.solveAllPaths()
+# symbFuzz.printMapConstrains()
+# symbFuzz.fuzz()
+
+# symbFuzz = CustomizedSymbolicFuzzer(gcd, max_tries=10, max_depth=10)
+# symbFuzz.fuzz()
+
+
+symbFuzz = CustomizedSymbolicFuzzer(copyToEachOther, max_tries=10, max_depth=10)
+symbFuzz.fuzz()
 
 # Our design:
 # 1- Redefine get_all_paths function so we can handle the cases where constraints 

@@ -26,9 +26,11 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
         self.pnodesListall  = {(self.fnenter.rid, 0): PNode(self.fnenter.rid, self.fnenter)}
 
     def printMapConstrains(self):
+        print("Map of constraints to nodes")
         for key, value in self.mapConstrains.items():
             print("Node at line %d: (%s): %s" % \
                 (self.pnodesListall[key].cfgnode.lineno(), "False" if key[1] else "True", value))
+        print("*************************************************")
 
     def getConstraintsByNode(self, node):
         return self.mapConstrains[node.idx, node.order]
@@ -46,7 +48,8 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
         self.z3 = kwargs.get('solver', self.z3)
         super().options(kwargs)
 
-    def renderCFG(self, graphName="defaultCFG", view=False):
+    def renderCFG(self, graphName="defaultCFG_", view=False):
+        graphName = graphName + self.fn_name
         graph = to_graph(gen_cfg(self.fn_source))
         graph.render(graphName,  view=view)
 
@@ -116,6 +119,13 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
 
             print("=> Solution = " , args)
             print("**********************************")
+
+    def fuzz(self):
+        self.renderCFG()
+        self.generatePnodesByDepth()
+        self.generatePathsList()
+        self.solveAllPaths()
+        self.printMapConstrains()
 
 # TODO:
 # If we want to get path by node, we can create dictionary that contains list of all Pnodes
