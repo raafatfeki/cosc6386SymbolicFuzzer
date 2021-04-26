@@ -23,10 +23,8 @@ symbFuzz.renderCFG()
 symbFuzz.generatePnodesByDepth()
 symbFuzz.generatePathsList()
 symbFuzz.solveAllPaths()
+symbFuzz.printMapConstrains()
 
-# allPath = symbFuzz.get_all_paths(symbFuzz.fnenter)
-# print(type(allPath[0][0]))
-# print(allPath[0][0])
 # Our design:
 # 1- Redefine get_all_paths function so we can handle the cases where constraints 
 # cannot be satisfied and enhance the performance because that functions return duplicates
@@ -35,5 +33,4 @@ symbFuzz.solveAllPaths()
 # 4- Use symbFuzz.solve_path_constraint(newPath.get_path_to_root()) to solve constrainst
 # 5- Output is bad, so we need to adjust it
 # 6- Look for the other specificity defined in Project Description
-
 

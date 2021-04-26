@@ -1254,7 +1254,6 @@ class AdvancedSymbolicFuzzer(AdvancedSymbolicFuzzer):
             for idx, constr in enumerate(constraints):
                 newConstraintsList.append("z3.Bool('P%d') == (%s)" % (idx, constr))
                 self.z3.assert_and_track(eval("z3.Bool('P%d')" % (idx)), constr)
-            self.constraints = ', '.join(constraints)
             st = 'self.z3.add(%s)' % ', '.join(newConstraintsList)
             eval(st)
             if self.z3.check() != z3.sat:
