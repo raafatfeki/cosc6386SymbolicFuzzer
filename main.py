@@ -10,6 +10,7 @@ from CustomizedSymbolicFuzzer import CustomizedSymbolicFuzzer
 from examples.check_triangle import check_triangle
 from examples.gcd import gcd
 from examples.copyToEachOther import copyToEachOther
+from examples.realValues import realValues
 
 # When calling the constructor, we create the cfg using ControlFlow package 
 # then we call process() function that create list of paths
@@ -33,9 +34,11 @@ from examples.copyToEachOther import copyToEachOther
 # symbFuzz.fuzz()
 
 
-symbFuzz = CustomizedSymbolicFuzzer(copyToEachOther, max_tries=10, max_depth=10)
-symbFuzz.fuzz()
+# symbFuzz = CustomizedSymbolicFuzzer(copyToEachOther, max_tries=10, max_depth=10)
+# symbFuzz.fuzz()
 
+symbFuzz = CustomizedSymbolicFuzzer(realValues, max_tries=10, max_depth=10)
+symbFuzz.fuzz()
 # Our design:
 # 1- Redefine get_all_paths function so we can handle the cases where constraints 
 # cannot be satisfied and enhance the performance because that functions return duplicates
