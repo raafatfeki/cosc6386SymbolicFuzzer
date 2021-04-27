@@ -1,11 +1,11 @@
 
-def copyToEachOther(a: float, b: float, k: float) -> int:
+def copyToEachOther(a: float, b: float, abc: float) -> int:
 	c: int = a
 	a = b
 	b = c
 	if (a == b):
-		if(k == b and (k == a)):
-			if(k == a):
+		if(abc == b and (abc == a)):
+			if(abc == a):
 				print("Impossible")
 				return -2
 		return -1

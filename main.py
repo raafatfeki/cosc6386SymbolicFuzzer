@@ -25,17 +25,10 @@ from examples.triangle_with_list import triangle_with_list
 # best solution would be to determine the depth of the cfg that max_depth should be less than it
 
 # symbFuzz = CustomizedSymbolicFuzzer(check_triangle, max_tries=10, max_depth=10)
-# fuzz contains all these functions
-# symbFuzz.renderCFG()
-# symbFuzz.generatePnodesByDepth()
-# symbFuzz.generatePathsList()
-# symbFuzz.solveAllPaths()
-# symbFuzz.printMapConstrains()
 # symbFuzz.fuzz()
 
 # symbFuzz = CustomizedSymbolicFuzzer(gcd, max_tries=10, max_depth=10)
 # symbFuzz.fuzz()
-
 
 # symbFuzz = CustomizedSymbolicFuzzer(copyToEachOther, max_tries=10, max_depth=10)
 # symbFuzz.fuzz()
