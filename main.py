@@ -13,6 +13,7 @@ from examples.copyToEachOther import copyToEachOther
 from examples.realValues import realValues
 from examples.evaluateBoolExpression import evaluateBoolExpression
 from examples.boolOnly import boolOnly
+from examples.triangle_with_list import triangle_with_list
 
 # When calling the constructor, we create the cfg using ControlFlow package 
 # then we call process() function that create list of paths
@@ -45,7 +46,10 @@ from examples.boolOnly import boolOnly
 # symbFuzz = CustomizedSymbolicFuzzer(evaluateBoolExpression, max_tries=10, max_depth=10)
 # symbFuzz.fuzz()
 
-symbFuzz = CustomizedSymbolicFuzzer(boolOnly, max_tries=10, max_depth=10)
+# symbFuzz = CustomizedSymbolicFuzzer(boolOnly, max_tries=10, max_depth=10)
+# symbFuzz.fuzz()
+
+symbFuzz = CustomizedSymbolicFuzzer(triangle_with_list, max_tries=10, max_depth=10)
 symbFuzz.fuzz()
 
 # Our design:

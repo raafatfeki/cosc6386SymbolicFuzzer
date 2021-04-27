@@ -475,7 +475,7 @@ def used_identifiers(src):
             lst.append(astnode.id)
         elif isinstance(astnode, ast.Expr):
             lst.extend(names(astnode.value))
-        elif isinstance(astnode, (ast.Num, ast.Str, ast.Tuple, ast.NameConstant)):
+        elif isinstance(astnode, (ast.Num, ast.Str, ast.Tuple, ast.NameConstant, ast.Subscript)):
             pass
         elif isinstance(astnode, ast.Assign):
             for t in astnode.targets:
@@ -506,6 +506,8 @@ SYM_VARS_STR = {
 }
 SYM_VARS_STR
 
+SYM_VARS_STR["List[int]"]=("z3.IntVector", "z3.IntVal")
+
 def translate_to_z3_name(v):
     return SYM_VARS_STR[v][0]
 
@@ -518,7 +520,11 @@ def declarations(astnode, hm=None):
     elif isinstance(astnode, ast.FunctionDef):
         #hm[astnode.name + '__return__'] = translate_to_z3_name(astnode.returns.id)
         for a in astnode.args.args:
-            hm[a.arg] = translate_to_z3_name(a.annotation.id)
+            if isinstance(a.annotation, ast.Subscript):
+                hm[a.arg] = translate_to_z3_name(a.annotation.value.id + '[%s]'%(a.annotation.slice.value.id))
+            else:
+                hm[a.arg] = translate_to_z3_name(a.annotation.id)
+
         for b in astnode.body:
             declarations(b, hm)
     elif isinstance(astnode, ast.Call):
@@ -568,8 +574,15 @@ if __name__ == "__main__":
 
 def define_symbolic_vars(fn_vars, prefix):
     sym_var_dec = ', '.join([prefix + n for n in fn_vars])
-    sym_var_def = ', '.join(["%s('%s%s')" % (t, prefix, n)
-                             for n, t in fn_vars.items()])
+    tmp_sym_var_def = list()
+    for n, t in fn_vars.items():
+        if t == "z3.IntVector":
+            if "_" in n:
+                n = n.split("_")[1]
+            tmp_sym_var_def.append("%s('%s%s', 10)" % (t, prefix, n))
+        else:
+            tmp_sym_var_def.append("%s('%s%s')" % (t, prefix, n))
+    sym_var_def = ', '.join(tmp_sym_var_def)
     return "%s = %s" % (sym_var_dec, sym_var_def)
 
 if __name__ == "__main__":
@@ -1263,7 +1276,14 @@ class AdvancedSymbolicFuzzer(AdvancedSymbolicFuzzer):
                 return {"Unsat Core: %s" % self.z3.unsat_core()}
             m = self.z3.model()
             solutions = {d.name(): m[d] for d in m.decls()}
-            my_args = {k: solutions.get(k, None) for k in self.fn_args}
+            my_args = dict()
+            vectors = self.getListOfXVectors(with_types)
+            for k in self.fn_args:
+                if k in vectors.keys():
+                    my_args[k] = self.getVectorTypeSolution(k, solutions)
+                else:
+                    my_args[k] = solutions.get(k, None)
+
         predicate = 'z3.And(%s)' % ','.join(
             ["%s == %s" % (k, v) for k, v in my_args.items()])
         eval('self.z3.add(z3.Not(%s))' % predicate)

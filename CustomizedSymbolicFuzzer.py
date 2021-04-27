@@ -24,7 +24,7 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
         self.mapConstrains = dict()
         # Each node defined by its key = (rid, order)
         self.pnodesListall  = {(self.fnenter.rid, 0): PNode(self.fnenter.rid, self.fnenter)}
-
+        self.vectorsList    = dict()
     def printMapConstrains(self):
         print("Map of constraints to nodes")
         for key, value in self.mapConstrains.items():
@@ -119,6 +119,24 @@ class CustomizedSymbolicFuzzer(AdvancedSymbolicFuzzer):
 
             print("=> Solution = " , args)
             print("**********************************")
+
+    def getListOfXVectors(self, with_types):
+        for k, v in with_types.items():
+            if v ==  "z3.IntVector":
+                if "_" not in k:
+                    self.vectorsList[k] = "_%s_0" % k
+        return self.vectorsList
+
+    def getVectorTypeSolution(self, k, solutions):
+        solList = list()
+        for indx in range(0,10):
+            k_indx = "%s__%d" % (k, indx)
+            if k_indx in solutions.keys():
+                if len(solList) != indx:
+                    for x2 in range(0,indx-1):
+                        solList.append(0)
+                solList.append(solutions[k_indx])
+        return solList
 
     def fuzz(self):
         self.renderCFG()
